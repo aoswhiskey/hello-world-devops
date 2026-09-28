@@ -2,6 +2,9 @@
 
 Тестовое задание: HTTP-приложение на порту `32777`, контейнер Docker и развёртывание в Minikube с двумя репликами.
 
+- GitHub: <https://github.com/aoswhiskey/hello-world-devops>
+- Docker Hub: <https://hub.docker.com/r/aoswhiskey/hello-world-devops>
+
 ## Что входит в проект
 
 - `app.py` — HTTP API без сторонних зависимостей;
@@ -23,21 +26,16 @@ python app.py
 ## Docker
 
 ```powershell
-docker build -t hello-world-devops:1.0.0 .
-docker run --rm -p 32777:32777 hello-world-devops:1.0.0
+docker pull aoswhiskey/hello-world-devops:1.0.0
+docker run --rm -p 32777:32777 aoswhiskey/hello-world-devops:1.0.0
 ```
 
-Для публикации заменить `DOCKERHUB_USERNAME` на имя пользователя Docker Hub:
+Сборка и публикация новой версии:
 
 ```powershell
-docker login
-docker tag hello-world-devops:1.0.0 DOCKERHUB_USERNAME/hello-world-devops:1.0.0
-docker tag hello-world-devops:1.0.0 DOCKERHUB_USERNAME/hello-world-devops:latest
-docker push DOCKERHUB_USERNAME/hello-world-devops:1.0.0
-docker push DOCKERHUB_USERNAME/hello-world-devops:latest
+docker build -t aoswhiskey/hello-world-devops:1.0.0 .
+docker push aoswhiskey/hello-world-devops:1.0.0
 ```
-
-После публикации можно заменить поле `image` в `k8s/deployment.yaml` на `DOCKERHUB_USERNAME/hello-world-devops:1.0.0`.
 
 ## Minikube
 
@@ -45,8 +43,6 @@ docker push DOCKERHUB_USERNAME/hello-world-devops:latest
 
 ```powershell
 minikube start --driver=docker
-docker build -t hello-world-devops:1.0.0 .
-minikube image load hello-world-devops:1.0.0
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl rollout status deployment/hello-world --timeout=120s

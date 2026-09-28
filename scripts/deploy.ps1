@@ -1,5 +1,5 @@
 param(
-    [string]$Image = "hello-world-devops:1.0.0"
+    [string]$Image = "aoswhiskey/hello-world-devops:1.0.0"
 )
 
 $ErrorActionPreference = "Stop"
